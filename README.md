@@ -135,3 +135,50 @@ SELECT * FROM produtos WHERE nome = 'Camiseta';
 ```
 
 Lembre-se de que a criação de índices deve ser cuidadosamente planejada, considerando as consultas mais frequentes e o equilíbrio entre o desempenho de leitura e escrita. Índices excessivos podem prejudicar o desempenho geral do banco de dados.
+
+
+## **Views no PostgreSQL**  
+
+### **O que é uma View?**  
+Uma *view* no PostgreSQL é uma tabela virtual baseada em uma consulta SQL. Ela não armazena os dados fisicamente, mas exibe os resultados da consulta sempre que é acessada. Funciona como uma forma de simplificar consultas complexas, abstraindo a lógica dos dados e melhorando a organização da informação.  
+
+### **Para que serve?**  
+- Facilita o acesso a dados complexos, permitindo que usuários utilizem consultas pré-definidas.  
+- Melhora a segurança ao restringir o acesso a certas colunas ou linhas.  
+- Promove a reutilização de consultas sem necessidade de repetir código.  
+- Auxilia na manutenção e na organização de sistemas com regras de negócios complexas.  
+
+### **Vantagens das Views**  
+:white_check_mark: **Simplicidade**: Reduz a complexidade de consultas SQL repetitivas.  
+:white_check_mark: **Segurança**: Pode ocultar informações sensíveis restringindo o acesso a certos dados.  
+:white_check_mark: **Modularidade**: Permite mudanças na estrutura do banco sem impactar diretamente os usuários.  
+:white_check_mark: **Facilidade de manutenção**: Centraliza a lógica de consultas, tornando mais fácil modificar e corrigir regras de negócios.  
+
+### **Desvantagens das Views**  
+:x: **Desempenho**: Como não armazenam dados, consultas complexas podem ser mais lentas, pois são executadas toda vez que a *view* é chamada.  
+:x: **Restrições de Atualização**: Algumas *views* não podem ser modificadas diretamente, especialmente se envolverem agregações ou *joins*.  
+:x: **Dependência de Estrutura**: Alterações nas tabelas subjacentes podem invalidar a *view*, exigindo manutenção adicional.  
+
+### **Exemplo Prático**  
+Suponha que temos uma tabela de pedidos e queremos criar uma *view* para mostrar apenas os pedidos entregues:  
+
+```sql
+CREATE VIEW pedidos_entregues AS
+SELECT id_pedido, cliente_id, data_pedido, valor_total
+FROM pedidos
+WHERE status = 'Entregue';
+```
+
+Agora, para acessar os pedidos entregues, basta utilizar:  
+
+```sql
+SELECT * FROM pedidos_entregues;
+```
+
+Isso simplifica o acesso aos dados sem precisar repetir a condição `WHERE status = 'Entregue'` em várias consultas.  
+
+Caso queira excluir essa *view*, basta rodar:  
+
+```sql
+DROP VIEW pedidos_entregues;
+```  
